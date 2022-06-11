@@ -5,14 +5,13 @@ import com.example.level2.domain.board.Board;
 import com.example.level2.domain.like.Like;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Entity
+@Table(name = "USER")
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +29,11 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "Board_id")
-    private Board board_id;
+    @OneToOne(mappedBy = "writer_id", cascade = CascadeType.ALL)
+    private Board board;
 
-    @OneToOne
-    @JoinColumn(name = "Like_id")
-    private Like like_id;
+    @OneToOne(mappedBy = "like_id", cascade = CascadeType.ALL)
+    private Like like;
 
     User(UserDTO userDTO) {
         this.name = userDTO.getName();

@@ -7,24 +7,26 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
-public class Like extends Timestamped {
+@Table(name = "LIKES")
+public class Like {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-    @Column(nullable = false)
+//    @MapsId
     @OneToOne
     @JoinColumn(name = "User_id")
-    private User user_id;
+    private User like_id;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "likeFK")

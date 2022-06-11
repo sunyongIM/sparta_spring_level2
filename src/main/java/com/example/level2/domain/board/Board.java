@@ -3,12 +3,10 @@ package com.example.level2.domain.board;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.like.Like;
 import com.example.level2.domain.user.User;
-import com.example.level2.domain.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,8 +15,8 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
+@Table(name = "BOARD")
 public class Board extends Timestamped {
 
     @Id
@@ -33,7 +31,7 @@ public class Board extends Timestamped {
 
     @OneToOne
     @JoinColumn(name = "User_id")
-    private User user_id;
+    private User writer_id;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "boardFK")
