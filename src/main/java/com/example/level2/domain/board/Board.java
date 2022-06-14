@@ -1,5 +1,6 @@
 package com.example.level2.domain.board;
 
+import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.like.Like;
 import com.example.level2.domain.user.User;
@@ -39,20 +40,24 @@ public class Board extends Timestamped {
     private final List<Like> likeIds = new ArrayList<>();
 
 
-    public Board(BoardDTO boardDTO) {
-        this.img = boardDTO.getImg();
-        this.content = boardDTO.getContent();
-        this.layout = boardDTO.getLayout();
+    public Board(BoardReqDTO boardReqDTO) {
+        this.img = boardReqDTO.getImg();
+        this.content = boardReqDTO.getContent();
+        this.layout = boardReqDTO.getLayout();
     }
 
-    public void update(BoardDTO boardDTO) {
-        this.img = boardDTO.getImg();
-        this.content = boardDTO.getContent();
-        this.layout = boardDTO.getLayout();
+    public void update(BoardReqDTO boardReqDTO) {
+        this.img = boardReqDTO.getImg();
+        this.content = boardReqDTO.getContent();
+        this.layout = boardReqDTO.getLayout();
     }
 
     public void setWriterId(User user) {
         this.writerId = user;
+    }
+
+    public void addLikes(Like like){
+        like.setLikeId(this);
     }
 
 }

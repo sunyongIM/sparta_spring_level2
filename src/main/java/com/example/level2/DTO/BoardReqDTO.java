@@ -1,4 +1,4 @@
-package com.example.level2.domain.board;
+package com.example.level2.DTO;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDTO {
+public class BoardReqDTO {
     private Long writerId;
     private String img;
     private String content;

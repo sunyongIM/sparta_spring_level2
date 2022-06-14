@@ -1,5 +1,6 @@
 package com.example.level2.domain.user;
 
+import com.example.level2.DTO.UserDTO;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.board.Board;
 import com.example.level2.domain.like.Like;
@@ -31,6 +32,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickname;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -59,4 +61,7 @@ public class User extends Timestamped {
         board.setWriterId(this);
     }
 
+    public void addLikes(Like like){
+        like.setLikeId(this);
+    }
 }

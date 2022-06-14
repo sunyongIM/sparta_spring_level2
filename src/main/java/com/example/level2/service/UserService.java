@@ -1,7 +1,7 @@
 package com.example.level2.service;
 
 import com.example.level2.domain.user.User;
-import com.example.level2.domain.user.UserDTO;
+import com.example.level2.DTO.UserDTO;
 import com.example.level2.domain.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,12 +10,12 @@ import javax.transaction.Transactional;
 
 @AllArgsConstructor
 @Service
-@Transactional
 public class UserService {
     private final UserRepository userRepository;
 
 
     // 회원 가입
+    @Transactional
     public void addUser(UserDTO userDTO){
         User user = new User(userDTO);
         userRepository.save(user);
@@ -38,5 +38,7 @@ public class UserService {
                 ()-> new IllegalArgumentException("아이디가 존재하지 않습니다")
         );
     }
+    
+    // 회원정보 수정
 
 }

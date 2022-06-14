@@ -1,7 +1,7 @@
 package com.example.level2.controller;
 
 import com.example.level2.domain.user.User;
-import com.example.level2.domain.user.UserDTO;
+import com.example.level2.DTO.UserDTO;
 import com.example.level2.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 public class UserController {
+
     private final UserService userService;
 
     // 회원 가입
