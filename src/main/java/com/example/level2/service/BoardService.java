@@ -1,11 +1,14 @@
 package com.example.level2.service;
 
+import com.example.level2.DTO.LikeDTO;
 import com.example.level2.domain.board.Board;
 import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.domain.board.BoardRepository;
 import com.example.level2.DTO.BoardResDTO;
 import com.example.level2.domain.user.User;
 import com.example.level2.domain.user.UserRepository;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,8 @@ public class BoardService {
                 () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다")
         );
         Board board = new Board(boardReqDTO);
-        user.addBoard(board);
+//        user.addBoard(board);
+        board.setWriterId(user);
         boardRepository.save(board);
     }
 
@@ -33,14 +37,17 @@ public class BoardService {
     public List<BoardResDTO> findBoards() {
 //        return boardRepository.findAll();
         return boardRepository.findAll().stream().map(BoardResDTO::toRes).collect(Collectors.toList());
-
     }
 
     // 게시글 조회
     public Board findBoard(Long board_id) {
-        return boardRepository.findById(board_id).orElseThrow(
+        Board board = boardRepository.findById(board_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다")
         );
+
+        /*return boardRepository.findById(board_id).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다")
+        );*/
     }
 
     // 게시글 삭제

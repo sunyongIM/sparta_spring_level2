@@ -18,22 +18,25 @@ public class UserController {
         userService.addUser(userDTO);
     }
 
-//    // 로그인 (토큰)
-//    @PostMapping("/api/login")
-//    public void userLogin(@RequestBody UserDTO userDTO) {
-//
-//    }
+    // 로그인 (토큰)
+    @PostMapping("/api/login")
+    public String userLogin(@RequestBody UserDTO userDTO) {
 
-    // 로그인
-    @PostMapping("/api/login/")
-    public Boolean userLogin(@RequestBody UserDTO userDTO) {
-        return userService.loginUser(userDTO.getEmail(), userDTO.getPassword());
+        String token = userService.loginUser(userDTO);
+
+        return token;
     }
 
+//    // 로그인
+//    @PostMapping("/api/login/")
+//    public Boolean userLogin(@RequestBody UserDTO userDTO) {
+//        return userService.loginUser(userDTO.getEmail(), userDTO.getPassword());
+//    }
+
     // 마이페이지
-    @GetMapping("/api/mypage/{userId}")
+    @PostMapping("/api/mypage/")
     public User userDetails(@PathVariable Long userId) {
-        return new User();
+        return userService.detailsUser(userId);
     }
 
     // 회원정보 수정

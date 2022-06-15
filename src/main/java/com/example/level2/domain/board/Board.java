@@ -56,8 +56,4 @@ public class Board extends Timestamped {
         this.writerId = user;
     }
 
-    public void addLikes(Like like){
-        like.setLikeId(this);
-    }
-
 }

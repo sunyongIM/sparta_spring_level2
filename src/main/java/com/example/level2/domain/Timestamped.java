@@ -1,5 +1,6 @@
 package com.example.level2.domain;
 
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass // 상속했을 때, 컬럼으로 인식하게 합니다.
 @EntityListeners(AuditingEntityListener.class) // 생성/수정 시간을 자동으로 반영하도록 설정
+@Getter // Getter가 있어야 jackson을 사용하여 객체를 반환할 때 같이 반환된다
 public abstract class Timestamped { // abstract는 상속으로만 사용할 수 있다
 
     @CreatedDate // 생성일자임을 나타냅니다.

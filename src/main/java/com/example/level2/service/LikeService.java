@@ -29,8 +29,9 @@ public class LikeService {
                 () -> new IllegalArgumentException("해당하는 아이디가 존재하지 않습니다")
         );
         Like like = new Like();
-        user.addLikes(like);
-        board.addLikes(like);
+
+        like.setLikeId(user);
+        like.setLikeId(board);
 
         Optional<Like> likeOptional = likeRepository.findLikeByLikeIdAndBoardId(user, board);
 
