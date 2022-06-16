@@ -4,7 +4,6 @@ import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.like.Like;
 import com.example.level2.domain.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,23 +13,38 @@ import java.util.List;
 
 @Table(name = "BOARD")
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class Board extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
+    @Lob
     @Column(nullable = false)
-    private String img;
+    private String imageLink;
 
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private int layout;
+    private String userEmail;
+
+    @Column(nullable = false)
+    private String userNickname;
+
+    @Column(nullable = false)
+    private Integer layout;
+
+    public Board(Long _id, String imageLink, String content, String userEmail, String userNickname, Integer layout){
+        this._id = _id;
+        this.imageLink = imageLink;
+        this.content = content;
+        this.userEmail = userEmail;
+        this.userNickname = userNickname;
+        this.layout = layout;
+    }
 
     @ManyToOne
     @JoinColumn(name = "User_id")
@@ -39,15 +53,14 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL)
     private final List<Like> likeIds = new ArrayList<>();
 
-
     public Board(BoardReqDTO boardReqDTO) {
-        this.img = boardReqDTO.getImg();
+        this.imageLink = boardReqDTO.getImageByte();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
     }
 
     public void update(BoardReqDTO boardReqDTO) {
-        this.img = boardReqDTO.getImg();
+        this.imageLink = boardReqDTO.getImageByte();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
     }
@@ -55,5 +68,4 @@ public class Board extends Timestamped {
     public void setWriterId(User user) {
         this.writerId = user;
     }
-
 }

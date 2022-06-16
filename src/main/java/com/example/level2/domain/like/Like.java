@@ -14,23 +14,26 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Like extends Timestamped {
 
-    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_id")
     private User likeId;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Board_id")
     private Board boardId;
+
+    public Like(Long _id, User user, Board board){
+        this._id = _id;
+        this.likeId = user;
+        this.boardId = board;
+    }
+
 
     public void setLikeId(User user){
         this.likeId = user;

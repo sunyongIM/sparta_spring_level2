@@ -1,16 +1,20 @@
 package com.example.level2.DTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class LikeDTO {
-    private Long userId;
+//    private Long userId;
+    private String userEmail;
     private Long boardId;
+
+    public LikeDTO(String userEmail, Long boardId){
+//        this.userId = userId;
+        this.userEmail = userEmail;
+        this.boardId = boardId;
+    }
 }

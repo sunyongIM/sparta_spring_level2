@@ -10,26 +10,44 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class BoardResDTO {
     private Long _id;
+    private String imageLink;
     private String content;
-    private int layout;
-    private Long writerId;
-    private List<Long> likeIds;
+    private Integer layout;
+    private String userEmail;
+    private String userNickname;
+    private List<List<String>> likes;
 
-    public static BoardResDTO toRes(Board board){
-        List<Long> likeIds = new ArrayList<>();
-        for(Like likeObj : board.getLikeIds()){
-            likeIds.add(likeObj.getLikeId().get_id());
+    public BoardResDTO(Long _id, String imageLink, String content, Integer layout, String userEmail, String userNickname, List<List<String>> likes){
+        this._id = _id;
+        this.imageLink = imageLink;
+        this.content = content;
+        this.layout = layout;
+        this.userEmail = userEmail;
+        this.userNickname = userNickname;
+        this.likes = likes;
+    }
+
+    public static BoardResDTO toRes(Board board) {
+        // 좋아요 한 아이디 객체들을 id만 보이게 처리
+        List<List<String>> likeIds = new ArrayList<>();
+        for (Like likeObj : board.getLikeIds()) {
+            List<String> tempList = new ArrayList<>();
+            tempList.add(likeObj.getLikeId().getEmail());
+            tempList.add(likeObj.getLikeId().getNickname());
+
+            likeIds.add(tempList);
         }
 
         return BoardResDTO.builder().
                 _id(board.get_id())
+                .imageLink(board.getImageLink())
                 .content(board.getContent())
                 .layout(board.getLayout())
-                .writerId(board.getWriterId().get_id())
-                .likeIds(likeIds)
+                .userEmail(board.getUserEmail())
+                .userNickname(board.getUserNickname())
+                .likes(likeIds)
                 .build();
 
     }

@@ -5,9 +5,9 @@ import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.board.Board;
 import com.example.level2.domain.like.Like;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
 
 @Table(name = "USER")
 @Entity
-@AllArgsConstructor
-@Builder
 @Getter
+@NoArgsConstructor
 public class User extends Timestamped implements UserDetails {
 
     @Id
@@ -32,7 +31,7 @@ public class User extends Timestamped implements UserDetails {
 //    @Column(nullable = false)
 //    private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -49,7 +48,14 @@ public class User extends Timestamped implements UserDetails {
     @OneToMany(mappedBy = "likeId", cascade = CascadeType.ALL)
     private List<Like> likes;
 
-    public User(){}
+    public User(Long _id, String email, String nickname, String password, List<Board> boards, List<Like> likes){
+        this._id = _id;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.boards = boards;
+        this.likes = likes;
+    }
 
     public User(UserDTO userDTO) {
 //        this.name = userDTO.getName();
@@ -57,6 +63,7 @@ public class User extends Timestamped implements UserDetails {
         this.nickname = userDTO.getNickname();
         this.password = userDTO.getPassword();
     }
+
 
     public void update(UserDTO userDTO) {
 //        this.name = userDTO.getName();

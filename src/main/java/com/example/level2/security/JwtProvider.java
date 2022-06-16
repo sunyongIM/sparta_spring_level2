@@ -25,8 +25,8 @@ public class JwtProvider {
 
     private String secretKey = "spartaSpringLevels";
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    // 토큰 유효시간 5시간
+    private long tokenValidTime = 60 * 60 * 1000L * 5;
 
     private final UserDetailsService userDetailsService;
 

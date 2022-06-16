@@ -5,19 +5,24 @@ import com.example.level2.DTO.UserDTO;
 import com.example.level2.domain.user.UserRepository;
 import com.example.level2.security.JwtProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
-import java.util.Map;
 
-@AllArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtProvider jwtProvider){
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
+    }
 
     // 회원 가입
     @Transactional
@@ -28,7 +33,11 @@ public class UserService {
                 .nickname(userDTO.getNickname())
                 .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build();
-        userRepository.save(newUser);
+        try {
+            userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e){
+            System.out.println("이미 가입한 이메일 입니다");
+        }
     }
 
     // 로그인
@@ -44,12 +53,21 @@ public class UserService {
 
 
     // 마이페이지
-    public User detailsUser(Long _id){
-        return userRepository.findById(_id).orElseThrow(
+    public UserDTO detailsUser(String email){
+        User member = userRepository.findByEmail(email).orElseThrow(
                 ()-> new IllegalArgumentException("아이디가 존재하지 않습니다")
         );
+        return UserDTO.toUser(member);
     }
     
     // 회원정보 수정
+    @Transactional
+    public UserDTO alterUser(String email, UserDTO userDTO){
+        User member = userRepository.findByEmail(email).orElseThrow(
+                ()-> new IllegalArgumentException("아이디가 존재하지 않습니다")
+        );
+        member.update(userDTO);
 
+        return UserDTO.toUser(member);
+    }
 }
