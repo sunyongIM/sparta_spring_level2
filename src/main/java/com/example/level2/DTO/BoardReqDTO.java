@@ -8,15 +8,25 @@ import lombok.*;
 public class BoardReqDTO {
     private Long _id;
     private String email;
-    private String imageByte;
+    private String nickname;
+    private String imageString;
     private String content;
     private Integer layout;
 
-    public BoardReqDTO(Long _id, String email, String imageByte, String content, Integer layout) {
+//    public void setImageString(String imageString) {
+//        this.imageString = imageString;
+//    }
+
+    public BoardReqDTO(Long _id, String email, String nickname, String imageString, String content, Integer layout) {
         this._id = _id;
         this.email = email;
-        this.imageByte = imageByte;
+        this.nickname = nickname;
+        this.imageString = imageString;
         this.content = content;
         this.layout = layout;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

@@ -28,19 +28,15 @@ public class BoardService {
 
     // 게시글 추가
     @Transactional
-    public void addBoard(MultipartFile imgFile, BoardReqDTO boardReqDTO) {
+    public void addBoard(BoardReqDTO boardReqDTO) {
 
         User user = userRepository.findByEmail(boardReqDTO.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("해당 이메일이 존재하지 않습니다")
         );
 
-        try {
-            String byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(imgFile.getBytes()), StandardCharsets.UTF_8);
-            boardReqDTO.setImageByte(byteToString);
+        // 닉네임 정보만 받지 않았으므로 user객체에서 받아온다
+        boardReqDTO.setNickname(user.getNickname());
 
-        } catch (IOException e) {
-            throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());
-        }
         Board board = new Board(boardReqDTO);
         board.setWriterId(user);
         boardRepository.save(board);
@@ -48,11 +44,11 @@ public class BoardService {
 
     // 게시글 전체 조회
     public List<BoardResDTO> findBoards() {
-        // boardRepository를 이용하여 Board객체를 찾아 온 다음 원하는 형식으로 반환하기 위해 BoardResDTO로 변환한다 (toRes 메서드 사용)
+        /** boardRepository를 이용하여 Board객체를 찾아 온 다음 원하는 형식으로 반환하기 위해 BoardResDTO로 변환한다 (toRes 메서드 사용) */
         List<BoardResDTO> result = new ArrayList<>();
         List<Board> boardList = boardRepository.findAll();
-        for (Board board : boardList) {
-            result.add(BoardResDTO.toRes(board));
+        for (Board boardObj : boardList) {
+            result.add(BoardResDTO.toRes(boardObj));
         }
         return result;
 
@@ -62,7 +58,7 @@ public class BoardService {
 
     // 게시글 조회
     public BoardResDTO findBoard(Long board_id) {
-        // boardRepository를 이용하여 Board객체를 찾아 온 다음 원하는 형식으로 반환하기 위해 BoardResDTO로 변환한다 (toRes 메서드 사용)
+        /** boardRepository를 이용하여 Board객체를 찾아 온 다음 원하는 형식으로 반환하기 위해 BoardResDTO로 변환한다 (toRes 메서드 사용) */
         return BoardResDTO.toRes(boardRepository.findById(board_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다")
         ));
@@ -71,7 +67,7 @@ public class BoardService {
     // 게시글 삭제
     @Transactional
     public void removeBoard(Long board_id, String email) {
-        // token에서 찾아 온 email이 작성자 이메일과 같을 때만 삭제를 진행한다
+        /** token에서 찾아 온 email이 작성자 이메일과 같을 때만 삭제를 진행한다 */
         boardRepository.deleteBy_idAndUserEmail(board_id, email).orElseThrow(
                 () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
         );
@@ -79,14 +75,16 @@ public class BoardService {
 
     // 게시글 수정
     @Transactional
-    public void modifyBoard(MultipartFile imgFile, BoardReqDTO boardReqDTO) {
+    public void modifyBoard(Long boardId, MultipartFile imgFile, BoardReqDTO boardReqDTO) {
 
-        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.get_id(), boardReqDTO.getEmail()).orElseThrow(
+        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardId, boardReqDTO.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
         );
         try {
             String byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(imgFile.getBytes()), StandardCharsets.UTF_8);
-            boardReqDTO.setImageByte(byteToString);
+//            boardReqDTO.setImageByte(byteToString);
+            boardReqDTO = BoardReqDTO.builder().imageString(byteToString).build();
+
 
         } catch (IOException e) {
             throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());

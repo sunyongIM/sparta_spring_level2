@@ -32,13 +32,20 @@ public class LikeService {
         User user = userRepository.findByEmail(likeDTO.getUserEmail()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 아이디가 존재하지 않습니다")
         );
-        Like like = new Like();
+//        Like like = new Like();
+//
+//        like.setLikeId(user);
+//        like.setLikeId(board);
 
-        like.setLikeId(user);
-        like.setLikeId(board);
+        Like like = Like.builder()
+                .likeId(user)
+                .boardId(board)
+                .build();
 
+        // 해당 게시판의 번호에, 좋아요 한 아이디를 찾는다 
         Optional<Like> likeOptional = likeRepository.findLikeByLikeIdAndBoardId(user, board);
 
+        // 좋아요 한 아이디가 있으면 좋아요를 취소하고, 없으면 좋아요를 등록한다
         if (likeOptional.isPresent()) {
             likeRepository.deleteByLikeIdAndBoardId(user, board);
             return "좋아요 취소";

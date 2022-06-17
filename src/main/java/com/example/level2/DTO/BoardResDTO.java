@@ -30,7 +30,7 @@ public class BoardResDTO {
     }
 
     public static BoardResDTO toRes(Board board) {
-        // 좋아요 한 아이디 객체들을 id만 보이게 처리
+        /** 좋아요 한 아이디 객체들을 이메일과 닉네임만 보이게 처리 */
         List<List<String>> likeIds = new ArrayList<>();
         for (Like likeObj : board.getLikeIds()) {
             List<String> tempList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class BoardResDTO {
 
         return BoardResDTO.builder().
                 _id(board.get_id())
-                .imageLink(board.getImageLink())
+                .imageLink(board.getImageString())
                 .content(board.getContent())
                 .layout(board.getLayout())
                 .userEmail(board.getUserEmail())

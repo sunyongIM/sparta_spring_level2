@@ -4,6 +4,7 @@ import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.like.Like;
 import com.example.level2.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "BOARD")
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 public class Board extends Timestamped {
 
@@ -23,44 +25,49 @@ public class Board extends Timestamped {
 
     @Lob
     @Column(nullable = false)
-    private String imageLink;
+    private String imageString;
 
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private String userEmail;
 
-    @Column(nullable = false)
+    @Column
     private String userNickname;
 
     @Column(nullable = false)
     private Integer layout;
-
-    public Board(Long _id, String imageLink, String content, String userEmail, String userNickname, Integer layout){
-        this._id = _id;
-        this.imageLink = imageLink;
-        this.content = content;
-        this.userEmail = userEmail;
-        this.userNickname = userNickname;
-        this.layout = layout;
-    }
 
     @ManyToOne
     @JoinColumn(name = "User_id")
     private User writerId;
 
     @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL)
-    private final List<Like> likeIds = new ArrayList<>();
+    private List<Like> likeIds = new ArrayList<>();
+
+
+    public Board(Long _id, String imageString, String content, String userEmail, String userNickname, Integer layout, User writerId, List<Like> likeIds){
+        this._id = _id;
+        this.imageString = imageString;
+        this.content = content;
+        this.userEmail = userEmail;
+        this.userNickname = userNickname;
+        this.layout = layout;
+        this.writerId = writerId;
+        this.likeIds = likeIds;
+    }
 
     public Board(BoardReqDTO boardReqDTO) {
-        this.imageLink = boardReqDTO.getImageByte();
+        this.userEmail = boardReqDTO.getEmail();
+        this.userNickname = boardReqDTO.getNickname();
+        this.imageString = boardReqDTO.getImageString();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
     }
 
     public void update(BoardReqDTO boardReqDTO) {
-        this.imageLink = boardReqDTO.getImageByte();
+        this.imageString = boardReqDTO.getImageString();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
     }

@@ -5,9 +5,7 @@ import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.board.Board;
 import com.example.level2.domain.like.Like;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,14 +19,15 @@ import java.util.stream.Collectors;
 @Table(name = "USER")
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends Timestamped implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-//    @Column(nullable = false)
 //    private String name;
 
     @Column(nullable = false, unique = true)
@@ -63,7 +62,6 @@ public class User extends Timestamped implements UserDetails {
         this.nickname = userDTO.getNickname();
         this.password = userDTO.getPassword();
     }
-
 
     public void update(UserDTO userDTO) {
 //        this.name = userDTO.getName();

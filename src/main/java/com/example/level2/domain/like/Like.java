@@ -5,6 +5,7 @@ import com.example.level2.domain.board.Board;
 import com.example.level2.domain.user.User;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Table(name = "LIKES")
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 public class Like extends Timestamped {
 
@@ -35,12 +37,12 @@ public class Like extends Timestamped {
     }
 
 
-    public void setLikeId(User user){
-        this.likeId = user;
-    }
-
-    public void setLikeId(Board board){
-        this.boardId = board;
-    }
+//    public void setLikeId(User user){
+//        this.likeId = user;
+//    }
+//
+//    public void setLikeId(Board board){
+//        this.boardId = board;
+//    }
 
 }

@@ -36,14 +36,14 @@ public class UserController {
 
     // 마이페이지
     @GetMapping("/api/mypage/")
-    public UserDTO userDetails(@RequestHeader String header) {
+    public UserDTO userDetails(@RequestHeader(value = "jwt") String header) {
         String email = jwtProvider.getUserPk(header);
         return userService.detailsUser(email);
     }
 
     // 회원정보 수정
     @GetMapping("/api/mypage/alter")
-    public UserDTO userAlter(@RequestHeader String header, @RequestBody UserDTO userDTO) {
+    public UserDTO userAlter(@RequestHeader(value = "jwt") String header, @RequestBody UserDTO userDTO) {
         String email = jwtProvider.getUserPk(header);
         return userService.alterUser(email, userDTO);
     }

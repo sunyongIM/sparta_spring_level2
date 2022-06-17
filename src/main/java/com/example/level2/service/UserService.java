@@ -5,6 +5,7 @@ import com.example.level2.DTO.UserDTO;
 import com.example.level2.domain.user.UserRepository;
 import com.example.level2.security.JwtProvider;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class UserService {
     }
 
     // 회원 가입
-    @Transactional
+//    @Transactional
     public void addUser(UserDTO userDTO){
         User newUser = User.builder()
                 .email(userDTO.getEmail())
