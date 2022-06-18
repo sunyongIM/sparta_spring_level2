@@ -27,10 +27,11 @@ public class BoardController {
     @PostMapping("/api/boards")
     public void boardAdd(@RequestHeader(value = "jwt") String header, @RequestParam("image") MultipartFile imgFile, @ModelAttribute("boardJson") BoardReqDTO boardReqDTO) {
         String email = jwtProvider.getUserPk(header);
-
     }*/
 
     // 게시글 추가 (img 파일 추가)
+    /** S3 웹 스토리지를 사용하지 않고 DB에 이미지 파일을 저장 해봤다
+     * 다음엔 S3에 이미지 파일을 저장 해 볼 것이다 */
     @PostMapping("/api/boards")
     public void boardAdd(@RequestHeader(value = "jwt") String header, @RequestParam("image") MultipartFile imgFile,
                          @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
@@ -63,6 +64,7 @@ public class BoardController {
 
     // 게시글 조회
     @GetMapping("/api/board/{boardId}")
+    /** 과제 요구사항 4 - 로그인하지 않은 사용자도, 게시글 목록 조회는 가능하도록 하기 (WebSecurityConfig에 구현) */
     public BoardResDTO boardDetails(@PathVariable Long boardId) {
         return boardService.findBoard(boardId);
     }
@@ -80,9 +82,21 @@ public class BoardController {
     public void boardModify(@RequestHeader(value = "jwt") String header, @PathVariable Long boardId, @RequestParam("image") MultipartFile imgFile,
                             @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
         String email = jwtProvider.getUserPk(header);
+        String byteToString;
+        // base64로 이미지를 String으로 변환
+        try {
+            String mime = imgFile.getContentType();
+            String name = imgFile.getOriginalFilename();
+            byte[] data = imgFile.getBytes();
+            byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(imgFile.getBytes()), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());
+        }
+
         boardService.modifyBoard(
-                boardId, imgFile,
                 BoardReqDTO.builder()
+                        ._id(boardId)
+                        .imageString(byteToString)
                         .email(email)
                         .content(content)
                         .layout(layout)

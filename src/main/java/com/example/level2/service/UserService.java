@@ -1,11 +1,9 @@
 package com.example.level2.service;
 
-import com.example.level2.domain.user.User;
 import com.example.level2.DTO.UserDTO;
+import com.example.level2.domain.user.User;
 import com.example.level2.domain.user.UserRepository;
 import com.example.level2.security.JwtProvider;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,7 +40,11 @@ public class UserService {
     }
 
     // 로그인
-    public String loginUser(UserDTO userDTO){
+    public String loginUser(UserDTO userDTO) throws IllegalArgumentException{
+        /** 과제 요구사항 3 - 로그인 버튼을 누른 경우 닉네임과 비밀번호가 데이터베이스에 등록됐는지 확인한 뒤,
+         *  하나라도 맞지 않는 정보가 있다면 "닉네임 또는 패스워드를 확인해주세요"라는 메세지를
+         *  프론트엔드에서 띄워줄 수 있도록 예외처리 하기 */
+        String result;
         User member = userRepository.findByEmail(userDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if(!passwordEncoder.matches(userDTO.getPassword(), member.getPassword())){

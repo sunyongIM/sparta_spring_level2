@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         /*
+          /*
           userRepository에서 UserDetails 타입을 return 할 수 없다. 따라서,
           1. User 클래스에 UserDetails를 구현하여 같은 클래스에서 관리하거나  <-- 이 방법 사용
           2. UserDetail를 구분하여 따로 구현하여야 한다

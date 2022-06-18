@@ -39,12 +39,19 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private Integer layout;
 
+    @Column
+    @OneToOne(mappedBy = "boardImage")
+    private Image image;
+
     @ManyToOne
     @JoinColumn(name = "User_id")
     private User writerId;
 
     @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL)
     private List<Like> likeIds = new ArrayList<>();
+
+//    @Column
+//    private Integer likeCount;
 
 
     public Board(Long _id, String imageString, String content, String userEmail, String userNickname, Integer layout, User writerId, List<Like> likeIds){
@@ -70,6 +77,7 @@ public class Board extends Timestamped {
         this.imageString = boardReqDTO.getImageString();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
+
     }
 
     public void setWriterId(User user) {

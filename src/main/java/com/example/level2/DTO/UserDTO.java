@@ -16,13 +16,15 @@ public class UserDTO {
     private String email;
     private String nickname;
     private String password;
+    private String password_confirm;
     private List<Long> boards;
     private List<Long> likes;
 
-    public UserDTO(String email, String nickname, String password, List<Long> boards, List<Long> likes) {
+    public UserDTO(String email, String nickname, String password, String password_confirm, List<Long> boards, List<Long> likes) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+        this.password_confirm = password_confirm;
         this.boards = boards;
         this.likes = likes;
     }

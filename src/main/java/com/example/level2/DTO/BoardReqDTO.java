@@ -13,10 +13,6 @@ public class BoardReqDTO {
     private String content;
     private Integer layout;
 
-//    public void setImageString(String imageString) {
-//        this.imageString = imageString;
-//    }
-
     public BoardReqDTO(Long _id, String email, String nickname, String imageString, String content, Integer layout) {
         this._id = _id;
         this.email = email;

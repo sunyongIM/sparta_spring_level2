@@ -32,10 +32,6 @@ public class LikeService {
         User user = userRepository.findByEmail(likeDTO.getUserEmail()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 아이디가 존재하지 않습니다")
         );
-//        Like like = new Like();
-//
-//        like.setLikeId(user);
-//        like.setLikeId(board);
 
         Like like = Like.builder()
                 .likeId(user)
