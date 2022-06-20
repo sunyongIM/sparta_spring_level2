@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Table(name = "IMAGE")
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class Image extends Timestamped {
 
@@ -18,23 +17,23 @@ public class Image extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-    @Column(nullable = false)
     @OneToOne
     @JoinColumn(name = "Board_id")
-    private Board boardImage;
+    private Board board;
 
     @Column(nullable = false)
     private String imgName;
 
-    @Column
+    @Column(nullable = false)
     private String imgMime;
 
-    @Column
-    private Byte[] imgData;
+    @Column(columnDefinition ="BLOB")
+    @Lob
+    private byte[] imgData;
 
-    public Image(Long _id, Board board, String imgName, String imgMime, Byte[] imgData) {
-        this._id = _id;
-        this.boardImage = board;
+    @Builder
+    public Image(Board board, String imgName, String imgMime, byte[] imgData) {
+        this.board = board;
         this.imgName = imgName;
         this.imgMime = imgMime;
         this.imgData = imgData;

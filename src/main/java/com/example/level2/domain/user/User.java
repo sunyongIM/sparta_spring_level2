@@ -28,8 +28,6 @@ public class User extends Timestamped implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-//    private String name;
-
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -57,14 +55,12 @@ public class User extends Timestamped implements UserDetails {
     }
 
     public User(UserDTO userDTO) {
-//        this.name = userDTO.getName();
         this.email = userDTO.getEmail();
         this.nickname = userDTO.getNickname();
         this.password = userDTO.getPassword();
     }
 
     public void update(UserDTO userDTO) {
-//        this.name = userDTO.getName();
         this.email = userDTO.getEmail();
         this.nickname = userDTO.getNickname();
         this.password = userDTO.getPassword();

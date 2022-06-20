@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAllByOrderByCreatedAtDesc();
-    Long countByLikeIds();
 
     Optional<Board> deleteBy_idAndUserEmail(Long _id, String email);
     Optional<Board> findBy_idAndUserEmail(Long _id, String email);

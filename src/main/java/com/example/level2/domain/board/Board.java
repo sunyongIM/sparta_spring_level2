@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "BOARD")
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class Board extends Timestamped {
 
@@ -39,28 +38,24 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private Integer layout;
 
-    @Column
     @OneToOne(mappedBy = "boardImage")
     private Image image;
 
     @ManyToOne
-    @JoinColumn(name = "User_id")
+    @JoinColumn(name = "user_id")
     private User writerId;
 
     @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL)
     private List<Like> likeIds = new ArrayList<>();
 
-//    @Column
-//    private Integer likeCount;
-
-
-    public Board(Long _id, String imageString, String content, String userEmail, String userNickname, Integer layout, User writerId, List<Like> likeIds){
-        this._id = _id;
+    @Builder
+    public Board(String imageString, String content, String userEmail, String userNickname, Integer layout, Image image, User writerId, List<Like> likeIds){
         this.imageString = imageString;
         this.content = content;
         this.userEmail = userEmail;
         this.userNickname = userNickname;
         this.layout = layout;
+        this.image = image;
         this.writerId = writerId;
         this.likeIds = likeIds;
     }

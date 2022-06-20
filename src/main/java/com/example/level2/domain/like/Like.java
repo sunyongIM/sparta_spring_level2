@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Table(name = "LIKES")
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class Like extends Timestamped {
 
@@ -23,17 +22,17 @@ public class Like extends Timestamped {
     private Long _id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "User_id")
+    @JoinColumn(name = "user_id")
     private User likeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Board_id")
+    @JoinColumn(name = "board_id")
     private Board boardId;
 
-    public Like(Long _id, User user, Board board){
-        this._id = _id;
-        this.likeId = user;
-        this.boardId = board;
+    @Builder
+    public Like(User likeId, Board boardId){
+        this.likeId = likeId;
+        this.boardId = boardId;
     }
 
 

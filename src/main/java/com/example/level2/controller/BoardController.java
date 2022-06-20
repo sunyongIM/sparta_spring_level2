@@ -2,6 +2,8 @@ package com.example.level2.controller;
 
 import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.DTO.BoardResDTO;
+import com.example.level2.domain.board.Board;
+import com.example.level2.domain.board.Image;
 import com.example.level2.security.JwtProvider;
 import com.example.level2.service.BoardService;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -88,6 +90,13 @@ public class BoardController {
             String mime = imgFile.getContentType();
             String name = imgFile.getOriginalFilename();
             byte[] data = imgFile.getBytes();
+
+            Image image = Image.builder()
+                    .imgMime(mime)
+                    .imgName(name)
+                    .imgData(data)
+                    .build();
+
             byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(imgFile.getBytes()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());
@@ -95,7 +104,7 @@ public class BoardController {
 
         boardService.modifyBoard(
                 BoardReqDTO.builder()
-                        ._id(boardId)
+                        .boardId(boardId)
                         .imageString(byteToString)
                         .email(email)
                         .content(content)

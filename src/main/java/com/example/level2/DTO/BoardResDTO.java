@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
 public class BoardResDTO {
     private Long _id;
@@ -19,6 +18,7 @@ public class BoardResDTO {
     private String userNickname;
     private List<List<String>> likes;
 
+    @Builder
     public BoardResDTO(Long _id, String imageLink, String content, Integer layout, String userEmail, String userNickname, List<List<String>> likes){
         this._id = _id;
         this.imageLink = imageLink;

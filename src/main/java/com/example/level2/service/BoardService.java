@@ -85,7 +85,7 @@ public class BoardService {
     @Transactional
     public void modifyBoard(BoardReqDTO boardReqDTO) {
 
-        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.get_id(), boardReqDTO.getEmail()).orElseThrow(
+        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.getBoardId(), boardReqDTO.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
         );
 

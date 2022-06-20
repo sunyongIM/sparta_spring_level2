@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
 public class UserDTO {
     //    private String name;
@@ -20,6 +19,7 @@ public class UserDTO {
     private List<Long> boards;
     private List<Long> likes;
 
+    @Builder
     public UserDTO(String email, String nickname, String password, String password_confirm, List<Long> boards, List<Long> likes) {
         this.email = email;
         this.nickname = nickname;

@@ -39,10 +39,10 @@ public class UserController {
         String passwordPattern = "^((?!"+nickname+").)*$";
 
         // 프론트에 어떻게 에러를 반환하는지 모르겠음
-        if(!Pattern.matches(nickname, nicknamePattern)){
+        if(Pattern.matches(nickname, nicknamePattern)){
             throw new Exception("닉네임 확인");
         }
-        if(!Pattern.matches(password, passwordPattern)){
+        if(Pattern.matches(password, passwordPattern)){
             throw new Exception("비밀번호 확인");
         }
 
@@ -69,7 +69,6 @@ public class UserController {
         } catch (IllegalArgumentException e){
             throw new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요");
         }
-
 
         return token;
     }
