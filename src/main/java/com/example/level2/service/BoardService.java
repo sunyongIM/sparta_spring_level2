@@ -4,11 +4,15 @@ import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.DTO.BoardResDTO;
 import com.example.level2.domain.board.Board;
 import com.example.level2.domain.board.BoardRepository;
+import com.example.level2.domain.board.Image;
 import com.example.level2.domain.user.User;
 import com.example.level2.domain.user.UserRepository;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,17 +28,33 @@ public class BoardService {
 
     // 게시글 추가
     @Transactional
-    public void addBoard(BoardReqDTO boardReqDTO) {
+    public void addBoard(String email, BoardReqDTO boardReqDTO) {
 
-        User user = userRepository.findByEmail(boardReqDTO.getEmail()).orElseThrow(
+        String byteToString;
+
+        try {
+
+            String mime = boardReqDTO.getImage().getContentType();
+            String name = boardReqDTO.getImage().getOriginalFilename();
+            byte[] data = boardReqDTO.getImage().getBytes();
+
+            Image image = Image.builder()
+                    .imgMime(mime)
+                    .imgName(name)
+                    .imgData(data)
+                    .build();
+
+            byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(boardReqDTO.getImage().getBytes()), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store file : " + boardReqDTO.getImage().getOriginalFilename());
+        }
+
+        User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("해당 이메일이 존재하지 않습니다")
         );
 
-        // 닉네임 정보만 받지 않았으므로 user객체에서 받아온다
-        boardReqDTO.setNickname(user.getNickname());
-
         Board board = new Board(boardReqDTO);
-        board.setWriterId(user);
+        board.setuserId(user);
         boardRepository.save(board);
     }
 
@@ -82,14 +102,14 @@ public class BoardService {
     }
 
     // 게시글 수정
-    @Transactional
-    public void modifyBoard(BoardReqDTO boardReqDTO) {
+    /*@Transactional
+    public void modifyBoard(String email, BoardReqDTO boardReqDTO) {
 
-        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.getBoardId(), boardReqDTO.getEmail()).orElseThrow(
+        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.getBoardId(), email).orElseThrow(
                 () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
         );
 
         prevBoard.update(boardReqDTO);
-    }
+    }*/
 
 }

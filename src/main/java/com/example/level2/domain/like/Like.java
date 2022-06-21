@@ -22,25 +22,24 @@ public class Like extends Timestamped {
     private Long _id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User likeId;
+    @JoinColumn(name = "User_id")
+    private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "Board_id")
     private Board boardId;
 
     @Builder
-    public Like(User likeId, Board boardId){
-        this.likeId = likeId;
+    public Like(User userId, Board boardId){
+        this.userId = userId;
         this.boardId = boardId;
     }
 
-
-//    public void setLikeId(User user){
-//        this.likeId = user;
+//    public void setuserId(User user){
+//        this.userId = user;
 //    }
 //
-//    public void setLikeId(Board board){
+//    public void setuserId(Board board){
 //        this.boardId = board;
 //    }
 

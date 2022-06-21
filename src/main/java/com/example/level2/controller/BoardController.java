@@ -2,16 +2,10 @@ package com.example.level2.controller;
 
 import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.DTO.BoardResDTO;
-import com.example.level2.domain.board.Board;
-import com.example.level2.domain.board.Image;
 import com.example.level2.security.JwtProvider;
 import com.example.level2.service.BoardService;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -32,9 +26,12 @@ public class BoardController {
     }*/
 
     // 게시글 추가 (img 파일 추가)
-    /** S3 웹 스토리지를 사용하지 않고 DB에 이미지 파일을 저장 해봤다
-     * 다음엔 S3에 이미지 파일을 저장 해 볼 것이다 */
-    @PostMapping("/api/boards")
+
+    /**
+     * S3 웹 스토리지를 사용하지 않고 DB에 이미지 파일을 저장 해봤다
+     * 다음엔 S3에 이미지 파일을 저장 해 볼 것이다
+     */
+    /*@PostMapping("/api/boards")
     public void boardAdd(@RequestHeader(value = "jwt") String header, @RequestParam("image") MultipartFile imgFile,
                          @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
         // header의 jwt을 복호화하여 email을 추출한다
@@ -56,7 +53,38 @@ public class BoardController {
                 .layout(layout)
                 .build()
         );
+    }*/
+
+/*    @PostMapping("/api/boards")
+    public void boardAdd(@RequestHeader(value = "jwt") String header, @RequestParam("image") MultipartFile imgFile,
+                         @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
+        // header의 jwt을 복호화하여 email을 추출한다
+        String email = jwtProvider.getUserPk(header);
+        String byteToString;
+        // base64로 이미지를 String으로 변환
+        try {
+            byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(imgFile.getBytes()), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());
+        }
+
+        // BoardReqDTO를 build하여 서비스에 전송한다
+        boardService.addBoard(email,
+                BoardReqDTO.builder()
+                        .imageString(byteToString)
+                        .content(content)
+                        .layout(layout)
+                        .build()
+        );
+    }*/
+
+    @PostMapping("/api/boards")
+    public void boardAdd(@RequestHeader(value = "jwt") String header, BoardReqDTO boardReqDTO) {
+        // header의 jwt을 복호화하여 email을 추출한다
+        String email = jwtProvider.getUserPk(header);
+        boardService.addBoard(email, boardReqDTO);
     }
+
 
     // 게시글 전체 조회
     @GetMapping("/api/boards")
@@ -80,7 +108,7 @@ public class BoardController {
     }
 
     // 게시글 수정
-    @PutMapping("/api/board/{boardId}")
+    /*@PutMapping("/api/board/{boardId}")
     public void boardModify(@RequestHeader(value = "jwt") String header, @PathVariable Long boardId, @RequestParam("image") MultipartFile imgFile,
                             @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
         String email = jwtProvider.getUserPk(header);
@@ -102,15 +130,14 @@ public class BoardController {
             throw new RuntimeException("Could not store file : " + imgFile.getOriginalFilename());
         }
 
-        boardService.modifyBoard(
+        boardService.modifyBoard(email,
                 BoardReqDTO.builder()
                         .boardId(boardId)
-                        .imageString(byteToString)
-                        .email(email)
+                        .image(byteToString)
                         .content(content)
                         .layout(layout)
                         .build()
         );
-    }
+    }*/
 
 }

@@ -39,10 +39,10 @@ public class User extends Timestamped implements UserDetails {
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "writerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Board> boards;
 
-    @OneToMany(mappedBy = "likeId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Like> likes;
 
     public User(Long _id, String email, String nickname, String password, List<Board> boards, List<Like> likes){

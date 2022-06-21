@@ -34,8 +34,8 @@ public class BoardResDTO {
         List<List<String>> likeIds = new ArrayList<>();
         for (Like likeObj : board.getLikeIds()) {
             List<String> tempList = new ArrayList<>();
-            tempList.add(likeObj.getLikeId().getEmail());
-            tempList.add(likeObj.getLikeId().getNickname());
+            tempList.add(likeObj.getUserId().getEmail());
+            tempList.add(likeObj.getUserId().getNickname());
 
             likeIds.add(tempList);
         }

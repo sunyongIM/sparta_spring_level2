@@ -19,7 +19,7 @@ public class Image extends Timestamped {
 
     @OneToOne
     @JoinColumn(name = "Board_id")
-    private Board board;
+    private Board boardId;
 
     @Column(nullable = false)
     private String imgName;
@@ -32,8 +32,8 @@ public class Image extends Timestamped {
     private byte[] imgData;
 
     @Builder
-    public Image(Board board, String imgName, String imgMime, byte[] imgData) {
-        this.board = board;
+    public Image(Board boardId, String imgName, String imgMime, byte[] imgData) {
+        this.boardId = boardId;
         this.imgName = imgName;
         this.imgMime = imgMime;
         this.imgData = imgData;

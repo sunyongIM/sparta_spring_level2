@@ -34,16 +34,16 @@ public class LikeService {
         );
 
         Like like = Like.builder()
-                .likeId(user)
+                .userId(user)
                 .boardId(board)
                 .build();
 
         // 해당 게시판의 번호에, 좋아요 한 아이디를 찾는다 
-        Optional<Like> likeOptional = likeRepository.findLikeByLikeIdAndBoardId(user, board);
+        Optional<Like> likeOptional = likeRepository.findLikeByUserIdAndBoardId(user, board);
 
         // 좋아요 한 아이디가 있으면 좋아요를 취소하고, 없으면 좋아요를 등록한다
         if (likeOptional.isPresent()) {
-            likeRepository.deleteByLikeIdAndBoardId(user, board);
+            likeRepository.deleteByUserIdAndBoardId(user, board);
             return "좋아요 취소";
         } else {
             likeRepository.save(like);

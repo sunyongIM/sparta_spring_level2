@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
-    Optional<Like> findLikeByLikeIdAndBoardId(User like, Board board);
-    void deleteByLikeIdAndBoardId(User likeId, Board boardId);
+    Optional<Like> findLikeByUserIdAndBoardId(User like, Board board);
+    void deleteByUserIdAndBoardId(User likeId, Board boardId);
 }

@@ -22,60 +22,47 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
 
-    @Lob
-    @Column(nullable = false)
-    private String imageString;
+//    @Lob
+//    @Column(nullable = false)
+//    private String imageString;
 
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private String userEmail;
-
-    @Column
-    private String userNickname;
-
     @Column(nullable = false)
     private Integer layout;
 
-    @OneToOne(mappedBy = "boardImage")
+    @OneToOne(mappedBy = "boardId")
     private Image image;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User writerId;
+    @JoinColumn(name = "User_id")
+    private User userId;
 
     @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL)
     private List<Like> likeIds = new ArrayList<>();
 
     @Builder
-    public Board(String imageString, String content, String userEmail, String userNickname, Integer layout, Image image, User writerId, List<Like> likeIds){
-        this.imageString = imageString;
+    public Board(String content, Integer layout, Image image, User userId, List<Like> likeIds){
         this.content = content;
-        this.userEmail = userEmail;
-        this.userNickname = userNickname;
         this.layout = layout;
         this.image = image;
-        this.writerId = writerId;
+        this.userId = userId;
         this.likeIds = likeIds;
     }
 
     public Board(BoardReqDTO boardReqDTO) {
-        this.userEmail = boardReqDTO.getEmail();
-        this.userNickname = boardReqDTO.getNickname();
-        this.imageString = boardReqDTO.getImageString();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
     }
 
     public void update(BoardReqDTO boardReqDTO) {
-        this.imageString = boardReqDTO.getImageString();
         this.content = boardReqDTO.getContent();
         this.layout = boardReqDTO.getLayout();
 
     }
 
-    public void setWriterId(User user) {
-        this.writerId = user;
+    public void setuserId(User user) {
+        this.userId = user;
     }
 }
