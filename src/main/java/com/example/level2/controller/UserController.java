@@ -23,7 +23,6 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/api/register")
-    @ResponseStatus
     public void userAdd(@RequestBody UserDTO userDTO) throws Exception {
         /** 과제 요구사항 2
          * - 닉네임은 `최소 3자 이상, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)`로 구성하기

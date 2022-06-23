@@ -2,49 +2,48 @@ package com.example.level2.service;
 
 import com.example.level2.DTO.BoardReqDTO;
 import com.example.level2.DTO.BoardResDTO;
+import com.example.level2.domain.Image.ImageRepository;
 import com.example.level2.domain.board.Board;
 import com.example.level2.domain.board.BoardRepository;
-import com.example.level2.domain.board.Image;
+import com.example.level2.domain.Image.Image;
 import com.example.level2.domain.user.User;
 import com.example.level2.domain.user.UserRepository;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
+    private final ImageRepository imageRepository;
 
-    public BoardService(UserRepository userRepository, BoardRepository boardRepository){
+    public BoardService(UserRepository userRepository, BoardRepository boardRepository, ImageRepository imageRepository){
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;
+        this.imageRepository = imageRepository;
     }
 
     // 게시글 추가
     @Transactional
     public void addBoard(String email, BoardReqDTO boardReqDTO) {
 
-        String byteToString;
-
+        Image image;
         try {
-
             String mime = boardReqDTO.getImage().getContentType();
             String name = boardReqDTO.getImage().getOriginalFilename();
             byte[] data = boardReqDTO.getImage().getBytes();
 
-            Image image = Image.builder()
+            image = Image.builder()
                     .imgMime(mime)
                     .imgName(name)
                     .imgData(data)
                     .build();
 
-            byteToString = "data:image/png;base64," + new String(Base64.encodeBase64(boardReqDTO.getImage().getBytes()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("Could not store file : " + boardReqDTO.getImage().getOriginalFilename());
         }
@@ -54,8 +53,11 @@ public class BoardService {
         );
 
         Board board = new Board(boardReqDTO);
-        board.setuserId(user);
+        board.setUserId(user);
+        image.setBoardId(board);
+
         boardRepository.save(board);
+        imageRepository.save(image);
     }
 
     // 게시글 전체 조회
@@ -73,7 +75,9 @@ public class BoardService {
         /* boardRepository를 이용하여 Board객체를 찾아 온 다음 원하는 형식으로 반환하기 위해 BoardResDTO로 변환한다 (toRes 메서드 사용) */
         List<BoardResDTO> result = new ArrayList<>();
 
-        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+//        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+        List<Board> boardList = boardRepository.findAllByOrOrderByLikeIdsCount();
+
 
         for (Board boardObj : boardList) {
             result.add(BoardResDTO.toRes(boardObj));
@@ -96,20 +100,27 @@ public class BoardService {
     @Transactional
     public void removeBoard(Long board_id, String email) {
         /* token에서 찾아 온 email이 작성자 이메일과 같을 때만 삭제를 진행한다 */
-        boardRepository.deleteBy_idAndUserEmail(board_id, email).orElseThrow(
-                () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
+        Board board = boardRepository.deleteBy_id(board_id).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다")
         );
+        if(board.getUserId().getEmail().equals(email)){
+            new Exception("해당 게시글의 작성자가 아닙니다");
+        }
     }
 
     // 게시글 수정
     /*@Transactional
     public void modifyBoard(String email, BoardReqDTO boardReqDTO) {
 
-        Board prevBoard = boardRepository.findBy_idAndUserEmail(boardReqDTO.getBoardId(), email).orElseThrow(
+        Board prevBoard = boardRepository.findBy_id(boardReqDTO.getBoardId()).orElseThrow(
                 () -> new IllegalArgumentException("게시글의 작성자가 아닙니다")
         );
 
         prevBoard.update(boardReqDTO);
     }*/
+
+    public Optional<Image> findImage(Long id){
+        return imageRepository.findById(id);
+    }
 
 }

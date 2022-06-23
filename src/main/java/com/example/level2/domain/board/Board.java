@@ -1,6 +1,7 @@
 package com.example.level2.domain.board;
 
 import com.example.level2.DTO.BoardReqDTO;
+import com.example.level2.domain.Image.Image;
 import com.example.level2.domain.Timestamped;
 import com.example.level2.domain.like.Like;
 import com.example.level2.domain.user.User;
@@ -26,7 +27,7 @@ public class Board extends Timestamped {
 //    @Column(nullable = false)
 //    private String imageString;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(3000)")
     private String content;
 
     @Column(nullable = false)
@@ -35,7 +36,7 @@ public class Board extends Timestamped {
     @OneToOne(mappedBy = "boardId")
     private Image image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_id")
     private User userId;
 
@@ -43,7 +44,7 @@ public class Board extends Timestamped {
     private List<Like> likeIds = new ArrayList<>();
 
     @Builder
-    public Board(String content, Integer layout, Image image, User userId, List<Like> likeIds){
+    public Board(String content, Integer layout, Image image, User userId, List<Like> likeIds) {
         this.content = content;
         this.layout = layout;
         this.image = image;
@@ -62,7 +63,8 @@ public class Board extends Timestamped {
 
     }
 
-    public void setuserId(User user) {
+    public void setUserId(User user) {
         this.userId = user;
     }
+
 }

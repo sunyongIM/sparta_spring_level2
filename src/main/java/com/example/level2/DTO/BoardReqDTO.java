@@ -33,4 +33,5 @@ public class BoardReqDTO {
         this.content = content;
         this.layout = layout;
     }
+
 }

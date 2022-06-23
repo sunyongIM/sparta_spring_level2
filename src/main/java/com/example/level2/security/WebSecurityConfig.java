@@ -10,13 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 
 /* 작성한 필터를 등록해 주고 필요한 부분을 채워준다 */
 @RequiredArgsConstructor
@@ -47,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 /** 과제 요구사항 4 - 로그인하지 않은 사용자도, 게시글 목록 조회는 가능하도록 하기 */
-                .mvcMatchers(HttpMethod.GET,"/api/boards").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/api/boards","/api/image/**").permitAll()
                 /* 회원가입과 로그인은 토큰을 받기 전 이므로 사용권한을 체크하지 않는다 */
                 .mvcMatchers(HttpMethod.POST,"/api/register","/api/login").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")

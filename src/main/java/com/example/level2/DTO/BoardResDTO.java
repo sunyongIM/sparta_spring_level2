@@ -4,6 +4,7 @@ import com.example.level2.domain.board.Board;
 import com.example.level2.domain.like.Like;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,22 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardResDTO {
     private Long _id;
-    private String imageLink;
     private String content;
     private Integer layout;
-    private String userEmail;
-    private String userNickname;
     private List<List<String>> likes;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+
 
     @Builder
-    public BoardResDTO(Long _id, String imageLink, String content, Integer layout, String userEmail, String userNickname, List<List<String>> likes){
+    public BoardResDTO(Long _id, String content, Integer layout, List<List<String>> likes, LocalDateTime createdAt, LocalDateTime modifiedAt){
         this._id = _id;
-        this.imageLink = imageLink;
         this.content = content;
         this.layout = layout;
-        this.userEmail = userEmail;
-        this.userNickname = userNickname;
         this.likes = likes;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static BoardResDTO toRes(Board board) {
@@ -42,12 +42,11 @@ public class BoardResDTO {
 
         return BoardResDTO.builder().
                 _id(board.get_id())
-                .imageLink(board.getImageString())
                 .content(board.getContent())
                 .layout(board.getLayout())
-                .userEmail(board.getUserEmail())
-                .userNickname(board.getUserNickname())
                 .likes(likeIds)
+                .createdAt(board.getCreatedAt())
+                .modifiedAt(board.getModifiedAt())
                 .build();
 
     }
