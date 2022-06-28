@@ -14,10 +14,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> deleteBy_id(Long _id);
 
     @Query(value = "select b " +
-            "from Board as b left join Like as l " +
-            "where b = l.boardId " +
-            "group by b " +
-            "order by count(b.likeIds)")
+            "from Board b left join Like l " +
+            "on b = l.boardId " +
+            "group by b._id " +
+            "order by count(l) desc ")
     List<Board> findAllByOrOrderByLikeIdsCount();
 
 }

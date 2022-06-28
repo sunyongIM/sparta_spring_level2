@@ -5,6 +5,7 @@ import com.example.level2.DTO.BoardResDTO;
 import com.example.level2.domain.Image.Image;
 import com.example.level2.security.JwtProvider;
 import com.example.level2.service.BoardService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,6 @@ public class BoardController {
                 .build()
         );
     }*/
-
     @PostMapping("/api/boards")
     public void boardAdd(@RequestHeader(value = "jwt") String header, @RequestParam("image") MultipartFile imgFile,
                          @RequestParam("content") String content, @RequestParam("layout") Integer layout) {
@@ -86,9 +86,9 @@ public class BoardController {
 
     // 이미지 URL
     @GetMapping("/api/image/{boardId}")
-    public ResponseEntity<byte[]> findOne(@PathVariable Long boardId){
+    public ResponseEntity<byte[]> findOne(@PathVariable Long boardId) {
         Image image = boardService.findImage(boardId).orElseThrow(
-                ()-> new IllegalArgumentException("이미지를 찾을 수 없습니다")
+                () -> new IllegalArgumentException("이미지를 찾을 수 없습니다")
         );
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", image.getImgMime());

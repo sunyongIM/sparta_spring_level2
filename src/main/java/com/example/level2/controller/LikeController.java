@@ -3,7 +3,7 @@ package com.example.level2.controller;
 import com.example.level2.DTO.LikeDTO;
 import com.example.level2.security.JwtProvider;
 import com.example.level2.service.LikeService;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

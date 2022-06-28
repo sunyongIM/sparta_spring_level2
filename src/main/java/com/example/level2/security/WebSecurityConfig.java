@@ -18,6 +18,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // swagger 접근
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
     private final JwtProvider jwtProvider;
 
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
@@ -41,10 +56,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
+                // swagger 설정
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 /** 과제 요구사항 4 - 로그인하지 않은 사용자도, 게시글 목록 조회는 가능하도록 하기 */
-                .mvcMatchers(HttpMethod.GET,"/api/boards","/api/image/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/api/boards", "/api/image/**").permitAll()
                 /* 회원가입과 로그인은 토큰을 받기 전 이므로 사용권한을 체크하지 않는다 */
-                .mvcMatchers(HttpMethod.POST,"/api/register","/api/login").permitAll()
+                .mvcMatchers(HttpMethod.POST, "/api/register", "/api/login").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .mvcMatchers("/user/**").hasRole("USER")
                 .anyRequest().authenticated() // 그외 나머지 요청은 누구나 접근 가능
@@ -53,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class);
         // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
     }
+
 
 
 //    @Bean

@@ -3,11 +3,9 @@ package com.example.level2.controller;
 import com.example.level2.DTO.UserDTO;
 import com.example.level2.security.JwtProvider;
 import com.example.level2.service.UserService;
-import org.springframework.validation.annotation.Validated;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.regex.Pattern;
 
 @RestController
@@ -34,8 +32,8 @@ public class UserController {
 
         // 닉네임이 너무 길어질 것에 대비하여 12자로 제한
         String nicknamePattern = "^[a-zA-Z0-9]{3,12}$";
-        // 닉네임을 포함하지 않는 정규식은 작성하였지만, 4자 이상 조건 X
-        String passwordPattern = "^((?!"+nickname+").)*$";
+        // 닉네임을 포함하지 않는 4자 이상 정규식
+        String passwordPattern = "^((?!"+nickname+"){4,}.)*$";
 
         // 프론트에 어떻게 에러를 반환하는지 모르겠음
         if(Pattern.matches(nickname, nicknamePattern)){

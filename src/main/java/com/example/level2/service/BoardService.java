@@ -22,7 +22,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final ImageRepository imageRepository;
 
-    public BoardService(UserRepository userRepository, BoardRepository boardRepository, ImageRepository imageRepository){
+    public BoardService(UserRepository userRepository, BoardRepository boardRepository, ImageRepository imageRepository) {
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;
         this.imageRepository = imageRepository;
@@ -103,8 +103,7 @@ public class BoardService {
         Board board = boardRepository.deleteBy_id(board_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다")
         );
-        if(board.getUserId().getEmail().equals(email)){
-            new Exception("해당 게시글의 작성자가 아닙니다");
+        if (board.getUserId().getEmail().equals(email)) {
         }
     }
 
@@ -119,7 +118,7 @@ public class BoardService {
         prevBoard.update(boardReqDTO);
     }*/
 
-    public Optional<Image> findImage(Long id){
+    public Optional<Image> findImage(Long id) {
         return imageRepository.findById(id);
     }
 
